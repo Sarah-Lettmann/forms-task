@@ -1,12 +1,12 @@
 <template>
   <div id="app">
-    <real-digital-form action="/script.php" method="POST">
-        <real-digital-textfield name="name" validation="[a-z]+"></real-digital-textfield>
-        <real-digital-textfield name="phone" validation="[0-9]+"></real-digital-textfield>
-        <real-digital-textfield name="subject"></real-digital-textfield>
-        <real-digital-button>
-            Send
-        </real-digital-button>
+    <real-digital-form action="http://httpbin.org/post" method="POST">
+      <real-digital-textfield name="name" validation="[a-z]+"></real-digital-textfield>
+      <real-digital-textfield name="phone" validation="[0-9]+"></real-digital-textfield>
+      <real-digital-textfield name="subject"></real-digital-textfield>
+      <real-digital-button>
+        Send
+      </real-digital-button>
     </real-digital-form>
   </div>
 </template>
@@ -21,18 +21,7 @@ export default {
   components: {
     'real-digital-form': RealDigitalForm,
     'real-digital-textfield': RealDigitalTextfield,
-    'real-digital-button': RealDigitalButton, 
+    'real-digital-button': RealDigitalButton
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
