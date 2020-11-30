@@ -1,9 +1,9 @@
 <template>
-  <div id="app">
-    <real-digital-form action="http://httpbin.org/post" method="POST">
-      <real-digital-textfield name="name" validation="[a-z]+"></real-digital-textfield>
-      <real-digital-textfield name="phone" validation="[0-9]+"></real-digital-textfield>
-      <real-digital-textfield name="subject"></real-digital-textfield>
+  <div id="app" class="page">
+    <real-digital-form action="http://httpbin.org/post" method="POST" v-slot="slotProps">
+      <real-digital-textfield name="name" validation="[a-z]+" @input-change="slotProps.onInputChange" :submitAbort="slotProps.submitAbort"></real-digital-textfield>
+      <real-digital-textfield name="phone" validation="[0-9]+" @input-change="slotProps.onInputChange" :submitAbort="slotProps.submitAbort"></real-digital-textfield>
+      <real-digital-textfield name="subject" @input-change="slotProps.onInputChange"></real-digital-textfield>
       <real-digital-button>
         Send
       </real-digital-button>
@@ -25,3 +25,19 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+* {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1rem;
+}
+
+.page {
+  display: flex;
+  height: 500px;
+}
+
+.hidden {
+  display: none;
+}
+</style>

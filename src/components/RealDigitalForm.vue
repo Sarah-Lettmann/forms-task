@@ -1,6 +1,9 @@
 <template>
   <form class="rd-form" @submit.prevent="submit">
-    <slot></slot>
+    <fieldset class="rd-form__fieldset">
+      <legend class="rd-form__legend">Contact Form</legend>
+      <slot :onInputChange="onInputChange" :submitAbort="submitAbort"></slot>
+    </fieldset>
   </form>
 </template>
 
@@ -8,31 +11,64 @@
 export default {
   data() {
     return {
-      test: 'test',
-      json: {
-        test: 'json test'
-      },
+      json: {},
+      allInputsValid: false,
+      submitAbort: false
     }
   },
   methods: {
-    submit() {
-      this.$dispatch('on-submit', this.json);
-      console.log('submit in parent called');
-      fetch(this.$attrs['action'], {
-        method: this.$attrs['method'],
-        body: this.test,
-      })
-      .then(result => result.text())
-      .catch(error => console.error(error));
+    submit: function() {
+      this.submitAbort = false;
+      this.$emit('on-submit', this.json); // emit event as interface to manipulate data
+      if(this.allInputsValid) {
+        console.log("all inputs are valid");
+        fetch(this.$attrs['action'], {
+          method: this.$attrs['method'],
+          body: this.json,
+        })
+        .then(result => result.text())
+        .then(result => console.log(result))
+        .catch(error => console.error(error));
+      } else {
+        this.submitAbort = true;
+      }
     },
     onInputChange: function(isValid, inputToJson) {
+      // set json data according to input data
       if(isValid) {
         this.json[inputToJson.name] = inputToJson.value;
+      } else {
+        this.json[inputToJson.name] = null;
       }
+      // check of all inputs are valid at this point
+      console.log('check if all inputs are valid');
+      this.allInputsValid = true;
+      Object.values(this.json).forEach(value => {
+        console.log(value);
+        if(value == null) {
+          this.allInputsValid = this.allInputsValid && false;
+        } else {
+          this.allInputsValid = this.allInputsValid && true;
+        }
+      });
     }
-  },
-  computed: {
-    
   }
 }
 </script>
+
+<style lang="scss">
+.rd-form {
+  display: inline-block;
+  margin: auto;
+
+  &__fieldset {
+    border: none;
+    box-shadow: 2px 2px 7px 0px lightgrey;
+  }
+
+  &__legend {
+    background-color: white;
+    padding: 0;
+  }
+}
+</style>
