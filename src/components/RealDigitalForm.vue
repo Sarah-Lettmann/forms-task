@@ -19,15 +19,18 @@ export default {
   methods: {
     submit: function() {
       this.submitAbort = false;
-      this.$emit('on-submit', this.json); // emit event as interface to manipulate data
+      this.$emit('onSubmit', this.json); // emit event as interface to manipulate data
       if(this.allInputsValid) {
         console.log("all inputs are valid");
+        console.log(JSON.stringify(this.json, null, 1));
+        console.log(JSON.stringify(this.json));
         fetch(this.$attrs['action'], {
+          headers: {"Content-Type": "application/json"},
           method: this.$attrs['method'],
-          body: this.json,
+          body: JSON.stringify(this.json),
         })
-        .then(result => result.text())
-        .then(result => console.log(result))
+        .then(result => result.json())
+        .then(result => this.$emit('onResponse', result))
         .catch(error => console.error(error));
       } else {
         this.submitAbort = true;
