@@ -1,7 +1,7 @@
 <template>
-  <form class="rd-form" @submit.prevent="submit">
+  <form class="rd-form" @submit.prevent="submit"><!-- prevent reload of page on submission -->
     <fieldset class="rd-form__fieldset">
-      <legend class="rd-form__legend">Contact Form</legend>
+      <legend class="rd-form__legend">Contact Data</legend>
       <slot :onInputChange="onInputChange" :submitAbort="submitAbort"></slot>
     </fieldset>
   </form>
@@ -11,9 +11,9 @@
 export default {
   data() {
     return {
-      json: {},
-      allInputsValid: false,
-      submitAbort: false
+      json: {}, // generated json from the form data
+      allInputsValid: false, // true if all inputs have valid input
+      submitAbort: false // true if submission is aborted due to errors
     }
   },
   methods: {
@@ -21,16 +21,13 @@ export default {
       this.submitAbort = false;
       this.$emit('onSubmit', this.json); // emit event as interface to manipulate data
       if(this.allInputsValid) {
-        console.log("all inputs are valid");
-        console.log(JSON.stringify(this.json, null, 1));
-        console.log(JSON.stringify(this.json));
         fetch(this.$attrs['action'], {
           headers: {"Content-Type": "application/json"},
           method: this.$attrs['method'],
           body: JSON.stringify(this.json),
         })
         .then(result => result.json())
-        .then(result => this.$emit('onResponse', result))
+        .then(result => this.$emit('onResponse', result)) // emit onResponse event to react to result data
         .catch(error => console.error(error));
       } else {
         this.submitAbort = true;
@@ -43,8 +40,7 @@ export default {
       } else {
         this.json[inputToJson.name] = null;
       }
-      // check of all inputs are valid at this point
-      console.log('check if all inputs are valid');
+      // check if all inputs are valid at this point
       this.allInputsValid = true;
       Object.values(this.json).forEach(value => {
         console.log(value);
@@ -67,6 +63,7 @@ export default {
   &__fieldset {
     border: none;
     box-shadow: 2px 2px 7px 0px lightgrey;
+    padding: 1rem;
   }
 
   &__legend {

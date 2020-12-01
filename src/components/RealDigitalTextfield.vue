@@ -3,7 +3,12 @@
     <label class="rd-textfield__label" :for="this.id">
       {{ $attrs['name'] }}
     </label>
-    <input class="rd-textfield__input" :class="{'rd-textfield__input--error': this.hasError}" :id="this.id" type="textfield" v-model="userInput" v-bind="$attrs" />
+    <input type="textfield"
+          class="rd-textfield__input"
+          :class="{'rd-textfield__input--error': this.hasError}"
+          :id="this.id"
+          v-model="userInput"
+          v-bind="$attrs" />
     <p class="rd-textfield__error" :class="{'hidden': !this.hasError}">Error! Please check the field above.</p>
   </div>
 </template>
@@ -12,11 +17,11 @@
 import idMixin from '../mixins/idMixin.js'
 
 export default {
-  inheritAttrs: false,
+  inheritAttrs: false, // don't inherit attributes from parent tag automatically to outer tag
   mixins: [idMixin], // used to generate id to map label to input
   data() {
     return {
-      userInput: ''
+      userInput: '' // user input of text field
     }
   },
   mounted: function() {
@@ -40,6 +45,7 @@ export default {
         value: this.userInput
       }
     },
+    // checks if textfield has error when submission was aborted
     hasError: function() {
       if(this.$attrs['submitAbort'] && !this.isValid) {
         return true;
@@ -49,7 +55,7 @@ export default {
     }
   },
   watch: {
-    // watch input and emit event for parent
+    // watch input and emit event for form
     userInput: function() {
       this.$emit('input-change', this.isValid, this.inputToJson);
     }

@@ -1,6 +1,6 @@
 <template>
   <button class="rd-button" type="submit">
-    <slot></slot> <!-- insert button text -->
+    <slot>Submit</slot> <!-- insert button text, 'Submit' is fallback -->
   </button>
 </template>
 
